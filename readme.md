@@ -23,7 +23,7 @@ While - yes x 7,399,323 ops/sec ±16.08% (28 runs sampled)
 While - no x 5,136,469 ops/sec ±15.70% (29 runs sampled)
 Fastest is Node.contains - yes
 
-### Firefox 42
+### Firefox 45
 
 Node.contains - yes x 47,991,762 ops/sec ±5.60% (57 runs sampled)
 Node.contains - no x 49,146,408 ops/sec ±0.86% (61 runs sampled)

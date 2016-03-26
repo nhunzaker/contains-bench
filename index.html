@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Test</title>
+  </head>
+  <body>
+    <div id="parent">
+      <div><div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div id="yes"></div></div></div>
+    </div>
+
+    <div><div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div id="no"></div></div></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.js"></script>
+    <script src="benchmark.js"></script>
+
+    <script type="text/javascript">
+      var parent = document.getElementById('parent');
+      var yes = document.getElementById('yes');
+      var no = document.getElementById('no');
+
+      var suite = new Benchmark.Suite;
+
+      suite.add('Node.contains - yes', function() {
+        var has = parent.contains(yes);
+        if (!has) throw new Error('expected to find child');
+      });
+
+      suite.add("Node.contains - no", function () {
+        var has = parent.contains(no);
+        if (has) throw new Error('expected not to find child');
+      });
+
+      suite.add("While - yes", function () {
+        var has = false;
+        var node = yes;
+
+        while (node) {
+          if (node === parent) {
+            has = true;
+            break;
+          }
+          node = node.parentNode;
+        }
+
+        if (!has) throw new Error('expected to find child');
+      });
+
+      suite.add("While - no", function() {
+        var has = false;
+        var node = no;
+
+        while (node) {
+          if (node === parent) {
+            has = true;
+            break;
+          }
+          node = node.parentNode;
+        }
+
+        if (has) throw new Error('expected not to find child');
+      });
+
+      suite.on('cycle', function(event) {
+        console.log(String(event.target));
+      });
+
+      suite.on('complete', function() {
+        console.log('Fastest is ' + this.filter('fastest').map('name'));
+      });
+
+      console.log("Running benchmarks. Please wait...")
+
+      suite.run({ async: true });
+
+    </script>
+  </body>
+</html>
